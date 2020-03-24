@@ -17,30 +17,34 @@ public class AnalysisHeight {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     SimpleMidiFile midiFile;
+    Map<NoteSign, Integer> analysisResult;
 
     public AnalysisHeight(SimpleMidiFile mid_file) {
         this.midiFile = mid_file;
     }
 
-    public Map<String, Integer> GetAnalysis() {
-        Map<String, Integer> analysisResult = new HashMap<String, Integer>();
-        Map<NoteSign, Integer> analysisResultBuf = new HashMap<NoteSign, Integer>();
+    public void doAnalysis() {
+        analysisResult = new HashMap<NoteSign, Integer>();
         List<Note> notes = eventsToNotes(midiFile.getMidiFile().getTracks().get(midiFile.getVoiceTrackIndex()).getEvents());
         for (Note n : notes) {
-            if (analysisResultBuf.containsKey(n.sign())) {
-                int i = analysisResultBuf.get(n.sign());
-                analysisResultBuf.put(n.sign(), i + 1);
+            if (analysisResult.containsKey(n.sign())) {
+                int i = analysisResult.get(n.sign());
+                analysisResult.put(n.sign(), i + 1);
             } else
-                analysisResultBuf.put(n.sign(), 1);
+                analysisResult.put(n.sign(), 1);
         }
-        for (Map.Entry<NoteSign, Integer> entry : analysisResultBuf.entrySet())
-            analysisResult.put(entry.getKey().fullName(), entry.getValue());
+    }
+
+    public Map<NoteSign, Integer> getAnalysis() {
+        return analysisResult;
+    }
+
+    public void showAnalysisResult() {
         logger.info("List of notes:");
-        analysisResultBuf.
+        analysisResult.
                 entrySet().
                 stream().
                 sorted((a1, a2) -> a2.getKey().getMidi() - a1.getKey().getMidi()).
                 forEach((k) -> logger.info(k.getKey().fullName() + ": " + k.getValue()));
-        return analysisResult;
     }
 }

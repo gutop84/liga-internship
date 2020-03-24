@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import ru.liga.App;
 import ru.liga.songtask.domain.SimpleMidiFile;
 
-public class ChangeClass {
+public class TheChanger {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static MidiFile changeMidi(SimpleMidiFile midiFile, float tempo, int trans) {

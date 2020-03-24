@@ -17,14 +17,15 @@ public class AnalysisDuration {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     SimpleMidiFile midiFile;
+    Map<Integer, Integer> analysisResult;
 
     public AnalysisDuration(SimpleMidiFile mid_file) {
         this.midiFile = mid_file;
     }
 
-    public Map<Integer, Integer> GetAnalysis() {
+    public void doAnalysis() {
         List<Note> notes = eventsToNotes(midiFile.getMidiFile().getTracks().get(midiFile.getVoiceTrackIndex()).getEvents());
-        Map<Integer, Integer> analysisResult = new HashMap<Integer, Integer>();
+        analysisResult = new HashMap<Integer, Integer>();
         int tickToMs;
         for (Note n : notes) {
             tickToMs = SongUtils.tickToMs(midiFile.getBpm(), midiFile.getMidiFile().getResolution(), n.durationTicks());
@@ -34,12 +35,17 @@ public class AnalysisDuration {
             } else
                 analysisResult.put(tickToMs, 1);
         }
+    }
+
+    public Map<Integer, Integer> getAnalysis() {
+        return analysisResult;
+    }
+
+    public void showAnalysisResult() {
         logger.info("The number of notes by duration:");
-        Map<Integer, Integer> forLogging = new HashMap<Integer, Integer>(analysisResult);
-        forLogging.entrySet().
+        analysisResult.entrySet().
                 stream().
                 sorted((a1, a2) -> (int) (a2.getKey() - a1.getKey())).
                 forEach((k) -> logger.info(k.getKey() + "ms: " + k.getValue()));
-        return analysisResult;
     }
 }

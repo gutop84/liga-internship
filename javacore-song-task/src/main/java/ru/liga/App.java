@@ -10,7 +10,7 @@ import ru.liga.songtask.analizismidi.AnalysisHeight;
 import ru.liga.songtask.domain.Note;
 import ru.liga.songtask.domain.NoteSign;
 import ru.liga.songtask.domain.SimpleMidiFile;
-import ru.liga.songtask.util.ChangeClass;
+import ru.liga.songtask.util.TheChanger;
 
 import java.io.*;
 import java.util.*;
@@ -79,13 +79,17 @@ public class App {
         } else {
             logger.debug("Starting range analysis");
             AnalysisRange analysisRange = new AnalysisRange(simpleMidiFile);
-            analysisRange.GetAnalysis();
+            analysisRange.doAnalysis();
+            analysisRange.showAnalysisResult();
             logger.debug("Starting duration analysis");
             AnalysisDuration analysisDuration = new AnalysisDuration(simpleMidiFile);
-            analysisDuration.GetAnalysis();
+            analysisDuration.doAnalysis();
+            analysisDuration.showAnalysisResult();
             logger.debug("Starting note-height analysis");
             AnalysisHeight analysisHeight = new AnalysisHeight(simpleMidiFile);
-            analysisHeight.GetAnalysis();
+            analysisHeight.doAnalysis();
+            analysisHeight.showAnalysisResult();
+
         }
     }
 
@@ -120,7 +124,7 @@ public class App {
     }
 
     private static MidiFile formChangedFile(SimpleMidiFile simpleMidiFile, int trans, int tempo) {
-        return ChangeClass.changeMidi(simpleMidiFile, tempo, trans);
+        return TheChanger.changeMidi(simpleMidiFile, tempo, trans);
     }
 
     /**

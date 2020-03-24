@@ -89,11 +89,11 @@ public class SimpleMidiFile {
                     orElseThrow(RuntimeException::new);
             logger.debug("Text Track founded");
             logger.debug("Searching for Voice track");
-            long NumberOfNotesInVoiceTrack = mdt.getEvents().size() - 1;
+            long numberOfNotesInVoiceTrack = mdt.getEvents().size() - 1;
             for (int i = 0; i < midiFile.getTracks().size(); i++) {
                 MidiTrack track = midiFile.getTracks().get(i);
                 List<Note> list = App.eventsToNotes(track.getEvents());
-                if (list.size() == NumberOfNotesInVoiceTrack) {
+                if (list.size() == numberOfNotesInVoiceTrack) {
                     this.VoiceTrackIndex = i;
                     logger.debug("Track {} meets conditions", i);
                 }

@@ -15,13 +15,14 @@ public class AnalysisRange {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public SimpleMidiFile midiFile;
+    ArrayList<String> analysisResult;
 
     public AnalysisRange(SimpleMidiFile mid_file) {
         this.midiFile = mid_file;
     }
 
-    public List<String> GetAnalysis() {
-        ArrayList<String> analysisResult = new ArrayList<String>();
+    public void doAnalysis() {
+        analysisResult = new ArrayList<String>();
         List<Note> notes = eventsToNotes(midiFile.getMidiFile().getTracks().get(midiFile.getVoiceTrackIndex()).getEvents());
         Note range_bottom, range_top;
         range_bottom = range_top = notes.get(0);
@@ -31,13 +32,19 @@ public class AnalysisRange {
             if (n.sign().getMidi() > range_top.sign().getMidi())
                 range_top = n;
         }
-        logger.info("Range:");
-        logger.info("top: " + range_top.sign().fullName());
-        logger.info("bottom: " + range_bottom.sign().fullName());
-        logger.info("range: " + (range_top.sign().getMidi() - range_bottom.sign().getMidi()));
         analysisResult.add(range_top.sign().fullName());
         analysisResult.add(range_bottom.sign().fullName());
         analysisResult.add(Integer.toString((range_top.sign().getMidi() - range_bottom.sign().getMidi())));
+    }
+
+    public ArrayList<String> getAnalysis() {
         return analysisResult;
+    }
+
+    public void showAnalysisResult() {
+        logger.info("Range:");
+        logger.info("top: " + analysisResult.get(0));
+        logger.info("bottom: " + analysisResult.get(1));
+        logger.info("range: " + analysisResult.get(2));
     }
 }
